@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-07-25T06:50:51.241Z</updated>
+  <updated>2017-10-27T17:14:47.023Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,154 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>消息中间件</title>
+    <link href="http://yoursite.com/2017/10/28/1/"/>
+    <id>http://yoursite.com/2017/10/28/1/</id>
+    <published>2017-10-27T17:03:33.000Z</published>
+    <updated>2017-10-27T17:14:47.023Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><h2 id="对比RPC优势"><a href="#对比RPC优势" class="headerlink" title="对比RPC优势"></a>对比RPC优势</h2><blockquote>
+<ol>
+<li>程序、模块间耦合性降低</li>
+<li>消息、事件、请求的顺序性和数据可恢复性</li>
+<li>异步通信能力</li>
+<li>缓冲能力</li>
+</ol>
+</blockquote>
+<h2 id="市面上消息队列归类"><a href="#市面上消息队列归类" class="headerlink" title="市面上消息队列归类"></a>市面上消息队列归类</h2><h3 id="第一代"><a href="#第一代" class="headerlink" title="第一代"></a>第一代</h3><blockquote>
+<p>特点：强调消息持久性和事务的要求、都遵循JMS（Java Message Service）规范<br>代表：ActiveMQ</p>
+</blockquote>
+<h3 id="第二代"><a href="#第二代" class="headerlink" title="第二代"></a>第二代</h3><blockquote>
+<p>特点：支持AMQP协议<br>代表：RabbitMQ</p>
+</blockquote>
+<h3 id="第三代"><a href="#第三代" class="headerlink" title="第三代"></a>第三代</h3><blockquote>
+<p>特点：一开始就面向分布式，采用ZooKeeper实现去中心化的集群管理<br>代表：Kafka、RocketMQ</p>
+</blockquote>
+<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><h3 id="JMS"><a href="#JMS" class="headerlink" title="JMS"></a>JMS</h3><p>以Java API 的方式给出了一个可以纳入JEE环境中的消息中间件所以应具备的编程级接口、总结了两种消息传递模型  </p>
+<h3 id="AMQP"><a href="#AMQP" class="headerlink" title="AMQP"></a>AMQP</h3><h2 id="消息传递模型"><a href="#消息传递模型" class="headerlink" title="消息传递模型"></a>消息传递模型</h2><h3 id="点对点消息通信"><a href="#点对点消息通信" class="headerlink" title="点对点消息通信"></a>点对点消息通信</h3><blockquote>
+<p>生产者和消费者通过一个Queue联系起来，生产者产生一个Message并将其发送到指定的Queue，Broker通知消费者去处理此消息，消息处理完成后，消费者发送回执给MQ，MQ收到回执后从其持久化存储中删除此消息。</p>
+</blockquote>
+<h3 id="发布-订阅模型"><a href="#发布-订阅模型" class="headerlink" title="发布/订阅模型"></a>发布/订阅模型</h3><blockquote>
+<p>生成者称为Publisher，消费者称为Subscriber，消息被发送到一个Topic中，每个Topic可以被多个Subscriber订阅</p>
+<p>Subscriber分为持久性和临时性：区别在于MQ会为持久性的Subscriber存储离线时收到的消息副本</p>
+</blockquote>
+<h3 id="消费者获取新消息的方式"><a href="#消费者获取新消息的方式" class="headerlink" title="消费者获取新消息的方式"></a>消费者获取新消息的方式</h3><blockquote>
+<p>Push方式：MQ收到消息后，主动调用消费者的新消息通知接口</p>
+<p>Pull方式：消费者轮询调用MQ API去获取新消息</p>
+<p>区别: Pull方式是占用消费者的线程，Push方式是占用MQ的线程，因此Push方式很难适应极高速、高并发的消息传递场景，会拖累其他消费者</p>
+</blockquote>
+<h2 id="消息系统"><a href="#消息系统" class="headerlink" title="消息系统"></a>消息系统</h2><h3 id="度量"><a href="#度量" class="headerlink" title="度量"></a>度量</h3><p>消息可靠性、系统性能</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>如何提高IO</p>
+<p>如何保证消息可靠性</p>
+<h2 id="消息"><a href="#消息" class="headerlink" title="消息"></a>消息</h2><h3 id="持久性消息"><a href="#持久性消息" class="headerlink" title="持久性消息"></a>持久性消息</h3><blockquote>
+<p>高可靠性<br>多出两个回执：消息发送时（被传递到消息系统时），消息消费时（被消费者完成消费时）</p>
+</blockquote>
+<h3 id="非持久性消息"><a href="#非持久性消息" class="headerlink" title="非持久性消息"></a>非持久性消息</h3><h3 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h3><p>系统日志、告警、非业务事件都可以定义为非持久性消息，以提升消息的吞吐量</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;消息队列&quot;&gt;&lt;a href=&quot;#消息队列&quot; class=&quot;headerlink&quot; title=&quot;消息队列&quot;&gt;&lt;/a&gt;消息队列&lt;/h1&gt;&lt;h2 id=&quot;对比RPC优势&quot;&gt;&lt;a href=&quot;#对比RPC优势&quot; class=&quot;headerlink&quot; title=&quot;对比R
+    
+    </summary>
+    
+      <category term="消息中间件" scheme="http://yoursite.com/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+    
+      <category term="消息队列" scheme="http://yoursite.com/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>消息中间件的意义和使用场景</title>
+    <link href="http://yoursite.com/2017/08/01/1/"/>
+    <id>http://yoursite.com/2017/08/01/1/</id>
+    <published>2017-08-01T07:52:41.000Z</published>
+    <updated>2017-08-01T08:10:03.617Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="消息中间件的意义"><a href="#消息中间件的意义" class="headerlink" title="消息中间件的意义"></a>消息中间件的意义</h2><p>消息中间件一般两个功能,解耦和异步处理,分别举个例子吧</p>
+<h3 id="解耦和"><a href="#解耦和" class="headerlink" title="解耦和"></a>解耦和</h3><p>比如我们做一个微博产品中的好友系统,就很需要使用消息中间件<br>当我们添加一个关注的时候, 涉及以下几个子系统：  </p>
+<pre><code>推荐系统,需要根据你关注的人给你做数据分析  
+搜索系统,需要根据你的数据建立索引  
+feed系统,需要根据你关注的人,发送一条新鲜事  
+统计系统 用于数据统计,了解产品情况  
+</code></pre><p>而如果直接在加关注的流程里进行这些操作,可能带来风险,所以,会引入mq来解耦合,因此就像你说的,一般是 “单向传输” 的(当然这不是绝对的,取决于你系统复杂度),而且发往mq的数据一般都不大,比如 from_uid, to_uid 就行了,一般都不会很大,如果发送的数据不满足你的要求,这个时候,需要调用好友系统提供的接口了</p>
+<h3 id="异步处理"><a href="#异步处理" class="headerlink" title="异步处理"></a>异步处理</h3><p>有的时候,我们一个操作可能会耗时比较久,所以,并不会在主要业务流程里进行处理<br>比如,我们在删除一个用户的时候,可能会有很多关联数据的操作,为了尽快的响应以及解耦合,我们会将这个消息发送给其他系统,让它们根据需求自己处理</p>
+<h2 id="消息中间件使用场景"><a href="#消息中间件使用场景" class="headerlink" title="消息中间件使用场景"></a>消息中间件使用场景</h2><h3 id="场景一"><a href="#场景一" class="headerlink" title="场景一"></a>场景一</h3><p>分布式系统中，不同系统之间传递消息。<br>比如系统B要监听系统A的消息，当A发出消息的时候，系统B根据消息，做相应的变化。这个场景很容易理解，就是不同系统之间的异步交互。  </p>
+<h3 id="场景二"><a href="#场景二" class="headerlink" title="场景二"></a>场景二</h3><p>在系统A中，自己发消息，自己监听。这个场景是我在现在工作中遇见的，当时看到自己的系统监听消息，下意识就想，是哪个系统发送的消息呢？后来问了别人才知道，是自己系统发消息，自己监听。为什么要这样做，自己系统中，直接可以调用到自己内部的一些方法了呀？原来这样做的原因有如下，首先，发送消息可以实现异步做一些动作，比如我们对一些信息做了修改，这些信息要同步到另一个系统中，我们有一种方法是，在一个事务里，做完修改就立刻调用另一个系统的modify方法，但是这样有一个问题，如果这个事务中很多方法，很可能导致调用超时，或者我们这一个方法体中，有多个调用，会导致系统耦合性太强，如果我们通过发送消息的方式调用，就做到了在本方法体中减少了方法调用，调用移动到了消息监听者中。这样不仅方法体中调用减少，而且做到了松耦合<br><a href="http://www.cnblogs.com/beijingstruggle/p/6399298.html" target="_blank" rel="external">原文查看</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;消息中间件的意义&quot;&gt;&lt;a href=&quot;#消息中间件的意义&quot; class=&quot;headerlink&quot; title=&quot;消息中间件的意义&quot;&gt;&lt;/a&gt;消息中间件的意义&lt;/h2&gt;&lt;p&gt;消息中间件一般两个功能,解耦和异步处理,分别举个例子吧&lt;/p&gt;
+&lt;h3 id=&quot;解耦和&quot;&gt;&lt;
+    
+    </summary>
+    
+      <category term="消息中间件" scheme="http://yoursite.com/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+    
+      <category term="消息中间件" scheme="http://yoursite.com/tags/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL-notes</title>
+    <link href="http://yoursite.com/2017/07/31/1/"/>
+    <id>http://yoursite.com/2017/07/31/1/</id>
+    <published>2017-07-31T06:26:19.000Z</published>
+    <updated>2017-07-31T06:43:16.462Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="MySQL使用杂记"><a href="#MySQL使用杂记" class="headerlink" title="MySQL使用杂记"></a>MySQL使用杂记</h2><h3 id="存储之中文编码"><a href="#存储之中文编码" class="headerlink" title="存储之中文编码"></a>存储之中文编码</h3><p>MySQL 5.0以上：<br>UTF-8：一个汉字 = 3个字节，英文是一个字节<br>GBK： 一个汉字 = 2个字节，英文是一个字节<br><a href="https://ruby-china.org/topics/24920" target="_blank" rel="external">详解MySQL的varchar</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;MySQL使用杂记&quot;&gt;&lt;a href=&quot;#MySQL使用杂记&quot; class=&quot;headerlink&quot; title=&quot;MySQL使用杂记&quot;&gt;&lt;/a&gt;MySQL使用杂记&lt;/h2&gt;&lt;h3 id=&quot;存储之中文编码&quot;&gt;&lt;a href=&quot;#存储之中文编码&quot; class=&quot;he
+    
+    </summary>
+    
+      <category term="MySQL" scheme="http://yoursite.com/categories/MySQL/"/>
+    
+      <category term="杂记" scheme="http://yoursite.com/categories/MySQL/%E6%9D%82%E8%AE%B0/"/>
+    
+    
+      <category term="MySQL" scheme="http://yoursite.com/tags/MySQL/"/>
+    
+      <category term="杂记" scheme="http://yoursite.com/tags/%E6%9D%82%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>my-db-tool</title>
+    <link href="http://yoursite.com/2017/07/28/1/"/>
+    <id>http://yoursite.com/2017/07/28/1/</id>
+    <published>2017-07-28T08:22:01.000Z</published>
+    <updated>2017-07-28T13:58:16.111Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="我的数据库工具"><a href="#我的数据库工具" class="headerlink" title="我的数据库工具"></a>我的数据库工具</h2><h3 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h3><p>现有很多个数据库，每个库里面又有许多表，需要将每个表的详细设计信息以数据字典的方式生成word文档</p>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><h4 id="1-利用navicat查询导出功能"><a href="#1-利用navicat查询导出功能" class="headerlink" title="1. 利用navicat查询导出功能"></a>1. 利用navicat查询导出功能</h4><p>MySQL中<a href="http://www.cnblogs.com/hzhida/archive/2012/08/08/2628826.html" target="_blank" rel="external">information_schema数据库</a>中存放的是数据库元数据，查询此库中COLUMNS和TABLES表，可以得到各个数据库表的设计信息，<br>再利用navicat查询导出功能，可以导出world表格文档。（一次性查出所有信息再一起导出，and和or连接时注意层级关系，是否需要加()）</p>
+<h4 id="2-编程实现"><a href="#2-编程实现" class="headerlink" title="2. 编程实现"></a>2. 编程实现</h4><p>通过编程实现连接不同数据库进行sql语句查询，将返回结果做处理，生成指定样式的word文档</p>
+<h5 id="2-1-java语言实现"><a href="#2-1-java语言实现" class="headerlink" title="2.1 java语言实现"></a>2.1 java语言实现</h5><h5 id="2-2-python语言实现"><a href="#2-2-python语言实现" class="headerlink" title="2.2 python语言实现"></a>2.2 python语言实现</h5>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;我的数据库工具&quot;&gt;&lt;a href=&quot;#我的数据库工具&quot; class=&quot;headerlink&quot; title=&quot;我的数据库工具&quot;&gt;&lt;/a&gt;我的数据库工具&lt;/h2&gt;&lt;h3 id=&quot;场景描述&quot;&gt;&lt;a href=&quot;#场景描述&quot; class=&quot;headerlink&quot; titl
+    
+    </summary>
+    
+      <category term="我的工具" scheme="http://yoursite.com/categories/%E6%88%91%E7%9A%84%E5%B7%A5%E5%85%B7/"/>
+    
+    
+      <category term="word文档" scheme="http://yoursite.com/tags/word%E6%96%87%E6%A1%A3/"/>
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+      <category term="工具" scheme="http://yoursite.com/tags/%E5%B7%A5%E5%85%B7/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
